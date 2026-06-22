@@ -1,4 +1,4 @@
-import { useCategory } from "../../UserContext";
+import { useCategory } from "../../Zustand";
 import styled from "styled-components";
 import foodCategory from "../../data/foodCategory";
 
