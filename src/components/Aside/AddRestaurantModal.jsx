@@ -1,7 +1,5 @@
 import PropTypes from "prop-types";
 import { useRef } from "react";
-// import '../styles/default.css';
-// import '../styles/AddRestaurantModal.css';
 import foodCategory from "../../data/foodCategory";
 import styled from "styled-components";
 import Modal from "../Modal";
@@ -111,7 +109,9 @@ function AddRestaurantModal({ handleClickAddRestaurant }) {
           <Select id="category" name="category" required ref={categoryRef}>
             <option value="">선택해 주세요</option>
             {foodCategory.map((r) => (
-              <option value={r}>{r}</option>
+              <option key={r} value={r}>
+                {r}
+              </option>
             ))}
           </Select>
         </FormItem>
