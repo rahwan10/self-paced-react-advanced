@@ -12,8 +12,12 @@ import CategoryFilter from "./components/Main/CategoryFilter";
 import RestaurantList from "./components/Main/RestaurantList";
 import RestaurantDetailModal from "./components/Aside/RestaurantDetailModal";
 import AddRestaurantModal from "./components/Aside/AddRestaurantModal";
+<<<<<<< HEAD
 import { useQuery } from "@tanstack/react-query";
 >>>>>>> 1897623 (feat: TanStack으로 restaurant 상태를 서버 상태로 관리)
+=======
+import { useQuery, useMutation } from "@tanstack/react-query";
+>>>>>>> 0bf3031 (feat: useMutation을 사용해 음식점 추가 기능 구현)
 
 function App() {
   // 상태값
@@ -58,11 +62,15 @@ function App() {
   };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   const handleClickAddRestaurant = (newRestaurant) => {
     setIsAddModal(false);
     setTotalRestaurants((prev) => [...prev, newRestaurant]);
 =======
   const handleClickAddRestaurant = async (newRestaurant) => {
+=======
+  const addRestaurant = async (newRestaurant) => {
+>>>>>>> 0bf3031 (feat: useMutation을 사용해 음식점 추가 기능 구현)
     await fetch("http://localhost:3000/restaurants", {
       method: "POST",
       headers: {
@@ -70,10 +78,18 @@ function App() {
       },
       body: JSON.stringify(newRestaurant),
     });
+  };
+  const { mutate } = useMutation({
+    mutationFn: addRestaurant,
+  });
+
+  const handleClickAddRestaurant = async (newRestaurant) => {
+    mutate(newRestaurant);
     console.log("음식점 추가 완료");
     setIsAddModal(false);
 >>>>>>> 1897623 (feat: TanStack으로 restaurant 상태를 서버 상태로 관리)
   };
+  
   return (
     <>
       <Header setIsAddModal={setIsAddModal} />
