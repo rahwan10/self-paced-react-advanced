@@ -34,7 +34,7 @@ function App() {
   const [isAddModal, setIsAddModal] = useState(false);
 
   const client = useQueryClient();
-  
+
   async function fetchRestaurants() {
     const res = await fetch("http://localhost:3000/restaurants");
     const data = await res.json();
@@ -87,7 +87,19 @@ function App() {
   };
   const { mutate } = useMutation({
     mutationFn: addRestaurant,
-    onSuccess: () => {
+
+    onMutate: async (newRestaurant) => {
+      await client.cancelQueries({ queryKey: ["restaurants"] });
+      const previousRestaurants = client.getQueryData(["restaurants"]);
+      client.setQueryData(["restaurants"], (old) => [...old, newRestaurant]);
+      return { previousRestaurants };
+    },
+
+    onError: (context) => {
+      client.setQueryData(["restaurants"], context.previousRestaurants);
+    },
+
+    onSettled: () => {
       client.invalidateQueries({ queryKey: ["restaurants"] });
     },
   });
