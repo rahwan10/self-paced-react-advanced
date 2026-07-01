@@ -53,12 +53,17 @@ function AddRestaurantModal({ handleClickAddRestaurant }) {
           <span className="help-text text-caption">메뉴 등 추가 정보를 입력해 주세요.</span>
         </div>
 
+<<<<<<< HEAD
         <div className="button-container">
           <button
             type="submit"
             onClick={() => handleAdd()}
             className="button button--primary text-caption"
           >
+=======
+        <ButtonContainer>
+          <Button type="button" onClick={() => handleAdd()}>
+>>>>>>> bef800f (fix:  TanStack 동작 확인을 위해 폼 제출 방지)
             추가하기
           </button>
         </div>
