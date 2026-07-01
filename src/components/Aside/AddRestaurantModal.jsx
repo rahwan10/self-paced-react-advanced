@@ -141,7 +141,7 @@ function AddRestaurantModal({ setIsAddModal, handleClickAddRestaurant }) {
         </FormItem>
 
         <ButtonContainer>
-          <Button type="submit" onClick={() => handleAdd()}>
+          <Button type="button" onClick={() => handleAdd()}>
             추가하기
           </Button>
         </ButtonContainer>
