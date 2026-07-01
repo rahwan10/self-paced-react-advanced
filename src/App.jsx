@@ -1,9 +1,19 @@
+<<<<<<< HEAD
 import { useState, useEffect } from 'react';
 import Header from './components/Header/Header';
 import CategoryFilter from './components/Main/CategoryFilter';
 import RestaurantList from './components/Main/RestaurantList';
 import RestaurantDetailModal from './components/Aside/RestaurantDetailModal';
 import AddRestaurantModal from './components/Aside/AddRestaurantModal';
+=======
+import { useState } from "react";
+import Header from "./components/Header/Header";
+import CategoryFilter from "./components/Main/CategoryFilter";
+import RestaurantList from "./components/Main/RestaurantList";
+import RestaurantDetailModal from "./components/Aside/RestaurantDetailModal";
+import AddRestaurantModal from "./components/Aside/AddRestaurantModal";
+import { useQuery } from "@tanstack/react-query";
+>>>>>>> 1897623 (feat: TanStack으로 restaurant 상태를 서버 상태로 관리)
 
 function App() {
   // 상태값
@@ -15,8 +25,13 @@ function App() {
 
   const [isAddModal, setIsAddModal] = useState(false);
 
-  const [totalRestaurants, setTotalRestaurants] = useState([]);
+  async function fetchRestaurants() {
+    const res = await fetch("http://localhost:3000/restaurants");
+    const data = await res.json();
+    return data;
+  }
 
+<<<<<<< HEAD
   useEffect(() => {
     fetch('http://localhost:3000/restaurants')
       .then((res) => res.json())
@@ -27,6 +42,12 @@ function App() {
     category === '전체'
       ? totalRestaurants
       : totalRestaurants.filter((r) => r.category === category);
+=======
+  const { data: totalRestaurants = [] } = useQuery({
+    queryKey: ["restaurants"],
+    queryFn: fetchRestaurants,
+  });
+>>>>>>> 1897623 (feat: TanStack으로 restaurant 상태를 서버 상태로 관리)
 
   const selectedRestaurant = totalRestaurants.find((r) => r.id === selectedRestaurantId);
 
@@ -36,9 +57,22 @@ function App() {
     setSelectedRestaurantId(r.id);
   };
 
+<<<<<<< HEAD
   const handleClickAddRestaurant = (newRestaurant) => {
     setIsAddModal(false);
     setTotalRestaurants((prev) => [...prev, newRestaurant]);
+=======
+  const handleClickAddRestaurant = async (newRestaurant) => {
+    await fetch("http://localhost:3000/restaurants", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newRestaurant),
+    });
+    console.log("음식점 추가 완료");
+    setIsAddModal(false);
+>>>>>>> 1897623 (feat: TanStack으로 restaurant 상태를 서버 상태로 관리)
   };
   return (
     <>
