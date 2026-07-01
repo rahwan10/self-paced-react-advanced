@@ -4,7 +4,7 @@ import CategoryFilter from "./components/Main/CategoryFilter";
 import RestaurantList from "./components/Main/RestaurantList";
 import RestaurantDetailModal from "./components/Aside/RestaurantDetailModal";
 import AddRestaurantModal from "./components/Aside/AddRestaurantModal";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 function App() {
   // 상태값
@@ -14,6 +14,8 @@ function App() {
 
   const [isAddModal, setIsAddModal] = useState(false);
 
+  const client = useQueryClient();
+  
   async function fetchRestaurants() {
     const res = await fetch("http://localhost:3000/restaurants");
     const data = await res.json();
@@ -46,6 +48,9 @@ function App() {
   };
   const { mutate } = useMutation({
     mutationFn: addRestaurant,
+    onSuccess: () => {
+      client.invalidateQueries({ queryKey: ["restaurants"] });
+    },
   });
 
   const handleClickAddRestaurant = async (newRestaurant) => {
@@ -53,7 +58,7 @@ function App() {
     console.log("음식점 추가 완료");
     setIsAddModal(false);
   };
-  
+
   return (
     <>
       <Header setIsAddModal={setIsAddModal} />
