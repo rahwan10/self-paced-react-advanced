@@ -67,7 +67,6 @@ function App() {
 
   const handleClickAddRestaurant = async (newRestaurant) => {
     mutate(newRestaurant);
-    console.log("음식점 추가 완료");
     setIsAddModal(false);
   };
 
