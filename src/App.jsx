@@ -26,7 +26,6 @@ function App() {
     fetchRestaurants();
   }, []);
   // 파생값
-  
 
   const selectedRestaurant = totalRestaurants.find(
     (r) => r.id === selectedRestaurantId,
@@ -38,9 +37,18 @@ function App() {
     setSelectedRestaurantId(r.id);
   };
 
-  const handleClickAddRestaurant = (newRestaurant) => {
+  const handleClickAddRestaurant = async (newRestaurant) => {
+    const res = await fetch("http://localhost:3000/restaurants", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newRestaurant),
+    });
+
+    const savedRestaurant = await res.json();
     setIsAddModal(false);
-    setTotalRestaurants((prev) => [...prev, newRestaurant]);
+    setTotalRestaurants((prev) => [...prev, savedRestaurant]);
   };
   return (
     <>
@@ -61,6 +69,7 @@ function App() {
         )}
         {isAddModal && (
           <AddRestaurantModal
+            setIsAddModal={setIsAddModal}
             handleClickAddRestaurant={handleClickAddRestaurant}
           />
         )}

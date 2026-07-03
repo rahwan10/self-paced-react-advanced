@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import addButton from "../../../templates/add-button.png";
 import styled from "styled-components";
+import "../styles/default.css";
 
 const HeaderWrapper = styled.header`
   display: flex;

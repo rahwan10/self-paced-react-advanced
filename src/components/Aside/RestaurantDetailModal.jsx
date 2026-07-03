@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Modal from "../Modal";
+import "../styles/default.css";
 
 const ModalTitle = styled.h2`
   margin-bottom: 36px;

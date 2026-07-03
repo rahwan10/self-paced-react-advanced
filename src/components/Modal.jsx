@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import styled from "styled-components";
 const OpenModal = styled.div`
   display: block;
@@ -38,3 +39,8 @@ function Modal({ children, onClose }) {
   );
 }
 export default Modal;
+
+Modal.propTypes = {
+  children: PropTypes.node.isRequired,
+  onClose: PropTypes.func.isRequired,
+};

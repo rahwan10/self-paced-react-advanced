@@ -1,6 +1,7 @@
-import { useCategory } from "../../UserContext";
+import { useCategory } from "../../CategoryStore";
 import styled from "styled-components";
 import foodCategory from "../../data/foodCategory";
+import "../styles/default.css";
 
 const RestaurantFilterContainer = styled.section`
   display: flex;
@@ -21,8 +22,8 @@ const SelectedCategory = styled.select`
   padding: 8px;
 `;
 function CategoryFilter() {
-  const { category, setCategory } = useCategory();
-
+  const category = useCategory((state) => state.category);
+  const setCategory = useCategory((state) => state.setCategory);
   return (
     <RestaurantFilterContainer>
       <SelectedCategory

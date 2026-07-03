@@ -1,10 +1,9 @@
 import PropTypes from "prop-types";
 import { useRef } from "react";
-// import '../styles/default.css';
-// import '../styles/AddRestaurantModal.css';
 import foodCategory from "../../data/foodCategory";
 import styled from "styled-components";
 import Modal from "../Modal";
+import "../styles/default.css";
 
 const ModalTitle = styled.h2`
   margin-bottom: 36px;
@@ -83,7 +82,7 @@ const Textarea = styled.textarea`
 
   font-size: 16px;
 `;
-function AddRestaurantModal({ handleClickAddRestaurant }) {
+function AddRestaurantModal({ setIsAddModal, handleClickAddRestaurant }) {
   const nameRef = useRef();
   const categoryRef = useRef();
   const descriptionRef = useRef();
@@ -101,7 +100,7 @@ function AddRestaurantModal({ handleClickAddRestaurant }) {
     handleClickAddRestaurant(newRestaurant);
   };
   return (
-    <Modal>
+    <Modal onClose={() => setIsAddModal(false)}>
       <ModalTitle>음식점 추가하기</ModalTitle>
       <form>
         <FormItem className="form-item form-item--required">
@@ -111,7 +110,9 @@ function AddRestaurantModal({ handleClickAddRestaurant }) {
           <Select id="category" name="category" required ref={categoryRef}>
             <option value="">선택해 주세요</option>
             {foodCategory.map((r) => (
-              <option value={r}>{r}</option>
+              <option key={r} value={r}>
+                {r}
+              </option>
             ))}
           </Select>
         </FormItem>
@@ -150,5 +151,6 @@ function AddRestaurantModal({ handleClickAddRestaurant }) {
 }
 AddRestaurantModal.propTypes = {
   handleClickAddRestaurant: PropTypes.func.isRequired,
+  setIsAddModal: PropTypes.func.isRequired,
 };
 export default AddRestaurantModal;
