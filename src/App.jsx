@@ -22,7 +22,11 @@ function App() {
     return data;
   }
 
-  const { data: totalRestaurants = [] } = useQuery({
+  const {
+    data: totalRestaurants = [],
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["restaurants"],
     queryFn: fetchRestaurants,
   });
@@ -75,10 +79,16 @@ function App() {
       <Header setIsAddModal={setIsAddModal} />
       <main>
         <CategoryFilter />
-        <RestaurantList
-          totalRestaurants={totalRestaurants}
-          handleClickRestaurantList={handleClickRestaurantList}
-        />
+        {isLoading ? (
+          <div>로딩중입니다...</div>
+        ) : isError ? (
+          <div>데이터를 불러오는 중 오류가 발생했습니다.</div>
+        ) : (
+          <RestaurantList
+            totalRestaurants={totalRestaurants}
+            handleClickRestaurantList={handleClickRestaurantList}
+          />
+        )}
       </main>
       <aside>
         {isDetailModal && (

@@ -86,31 +86,35 @@ function RestaurantList({ totalRestaurants, handleClickRestaurantList }) {
   return (
     <RestaurantListContainer>
       <ul className="restaurant-list">
-        {filteredRestaurants.map((r) => (
-          <Restaurant
-            key={r.id}
-            role="button"
-            tabIndex={0}
-            aria-label="상세보기"
-            onClick={() => {
-              handleClickRestaurantList(r);
-            }}
-            onKeyDown={() => handleClickRestaurantList(r)}
-            className="restaurant"
-          >
-            <RestaurantCategory>
-              <IconImage
-                src={categoryImage[r.category]}
-                alt={r.category}
-                className="category-icon"
-              />
-            </RestaurantCategory>
-            <RestaurantInfo>
-              <RestaurantName>{r.name}</RestaurantName>
-              <RestaurantDescription>{r.description}</RestaurantDescription>
-            </RestaurantInfo>
-          </Restaurant>
-        ))}
+        {filteredRestaurants.length === 0 ? (
+          <li>해당되는 음식점이 없습니다.</li>
+        ) : (
+          filteredRestaurants.map((r) => (
+            <Restaurant
+              key={r.id}
+              role="button"
+              tabIndex={0}
+              aria-label="상세보기"
+              onClick={() => {
+                handleClickRestaurantList(r);
+              }}
+              onKeyDown={() => handleClickRestaurantList(r)}
+              className="restaurant"
+            >
+              <RestaurantCategory>
+                <IconImage
+                  src={categoryImage[r.category]}
+                  alt={r.category}
+                  className="category-icon"
+                />
+              </RestaurantCategory>
+              <RestaurantInfo>
+                <RestaurantName>{r.name}</RestaurantName>
+                <RestaurantDescription>{r.description}</RestaurantDescription>
+              </RestaurantInfo>
+            </Restaurant>
+          ))
+        )}
       </ul>
     </RestaurantListContainer>
   );
