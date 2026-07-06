@@ -49,6 +49,7 @@ function App() {
       },
       body: JSON.stringify(newRestaurant),
     });
+
   };
   const { mutate } = useMutation({
     mutationFn: addRestaurant,
@@ -60,12 +61,21 @@ function App() {
       return { previousRestaurants };
     },
 
-    onError: (context) => {
-      client.setQueryData(["restaurants"], context.previousRestaurants);
+    onError: (err, newRestaurant, onMutateResult) => {
+      console.error("Error adding restaurant:", err);
+      console.log("Failed to add restaurant:", newRestaurant);
+      console.log(
+        "Restoring previous restaurants:",
+        onMutateResult.previousRestaurants,
+      );
+      client.setQueryData(["restaurants"], onMutateResult.previousRestaurants);
     },
 
-    onSettled: () => {
+    onSettled: (data, err) => {
       client.invalidateQueries({ queryKey: ["restaurants"] });
+      if (err) {
+        alert("음식점 추가 중 오류가 발생했습니다. 다시 시도해주세요.");
+      }
     },
   });
 
