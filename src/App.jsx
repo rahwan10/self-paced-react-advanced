@@ -5,7 +5,7 @@ import RestaurantList from "./components/Main/RestaurantList";
 import RestaurantDetailModal from "./components/Aside/RestaurantDetailModal";
 import AddRestaurantModal from "./components/Aside/AddRestaurantModal";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-
+import { useCategory } from "./categoryStore";
 function App() {
   // 상태값
   const [isDetailModal, setIsDetailModal] = useState(false);
@@ -17,17 +17,22 @@ function App() {
   const client = useQueryClient();
 
   async function fetchRestaurants() {
-    const res = await fetch("http://localhost:3000/restaurants");
+    const url =
+      category === "전체"
+        ? "http://localhost:3000/restaurants"
+        : `http://localhost:3000/restaurants?category=${category}`;
+    const res = await fetch(url);
     const data = await res.json();
     return data;
   }
+  const category = useCategory((state) => state.category);
 
   const {
     data: totalRestaurants = [],
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["restaurants"],
+    queryKey: ["restaurants", category],
     queryFn: fetchRestaurants,
   });
 
@@ -42,37 +47,47 @@ function App() {
   };
 
   const addRestaurant = async (newRestaurant) => {
-    await fetch("http://localhost:3000/restaurants", {
+    await fetch(`http://localhost:3000/restaurants`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(newRestaurant),
     });
-
   };
   const { mutate } = useMutation({
     mutationFn: addRestaurant,
 
     onMutate: async (newRestaurant) => {
-      await client.cancelQueries({ queryKey: ["restaurants"] });
-      const previousRestaurants = client.getQueryData(["restaurants"]);
-      client.setQueryData(["restaurants"], (old) => [...old, newRestaurant]);
+      await client.cancelQueries({
+        queryKey: ["restaurants"],
+      });
+      const previousRestaurants = client.getQueryData([
+        "restaurants",
+        category,
+      ]);
+      const showOptimisticUpdate =
+        category === "전체" || category === newRestaurant.category;
+      if (showOptimisticUpdate) {
+        client.setQueryData(["restaurants", category], (old) => [
+          ...old,
+          newRestaurant,
+        ]);
+      }
       return { previousRestaurants };
     },
 
     onError: (err, newRestaurant, onMutateResult) => {
-      console.error("Error adding restaurant:", err);
-      console.log("Failed to add restaurant:", newRestaurant);
-      console.log(
-        "Restoring previous restaurants:",
+      client.setQueryData(
+        ["restaurants", category],
         onMutateResult.previousRestaurants,
       );
-      client.setQueryData(["restaurants"], onMutateResult.previousRestaurants);
     },
 
     onSettled: (data, err) => {
-      client.invalidateQueries({ queryKey: ["restaurants"] });
+      client.invalidateQueries({
+        queryKey: ["restaurants"],
+      });
       if (err) {
         alert("음식점 추가 중 오류가 발생했습니다. 다시 시도해주세요.");
       }
