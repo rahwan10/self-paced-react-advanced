@@ -95,7 +95,7 @@ function App() {
   });
 
   const handleClickAddRestaurant = async (newRestaurant) => {
-    mutate(newRestaurant);
+    mutate({ ...newRestaurant, id: crypto.randomUUID() });
     setIsAddModal(false);
   };
 
